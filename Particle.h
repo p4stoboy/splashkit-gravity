@@ -28,9 +28,11 @@ void update_particles(std::vector<Particle>& particles);
 void draw_particles(std::vector<Particle>& particles);
 
 Particle::Particle(point_2d pos, vector_2d vel, vector_2d acc, color c, int life, int size = 3, int type = 0)
-        : position(pos), velocity(vel), acc(acc), clr(c), lifespan(life), max_lifespan(life), size(size), type(type), mass(pow(size, 4)) {}
+        : position(pos), velocity(vel), acc(acc), clr(c), lifespan(life), max_lifespan(life), size(size), type(type), mass(pow(size, 2)) {}
 
 void Particle::update() {
+    acc.x = clamp(acc.x, MIN_BLOCK_ACC, MAX_BLOCK_ACC);
+    acc.y = clamp(acc.y, MIN_BLOCK_ACC, MAX_BLOCK_ACC);
     velocity.x += acc.x;
     velocity.y += acc.y;
     // clamp
@@ -63,7 +65,12 @@ void Particle::act(Particle& other) {
 
     const float G = 0.3;
 
-    float force = G * (mass * other.mass) / pow(distance, 2);
+    // Calculate the inverse mass ratio and the exponential decay factor
+    float inverse_mass_ratio = other.mass / mass;
+    float decay_factor = exp(-inverse_mass_ratio);
+
+    // Calculate the force with the exponential decay factor
+    float force = G * (mass * other.mass) / pow(distance, 2) * decay_factor;
     if (type == 0) {
         force *= -1;
     }
@@ -71,9 +78,8 @@ void Particle::act(Particle& other) {
 
     other.acc.x += accel * direction.x;
     other.acc.y += accel * direction.y;
-    other.acc.x = clamp(other.acc.x, MIN_BLOCK_ACC, MAX_BLOCK_ACC);
-    other.acc.y = clamp(other.acc.y, MIN_BLOCK_ACC, MAX_BLOCK_ACC);
 }
+
 
 void Particle::draw() {
     fill_ellipse(clr, position.x, position.y, size, size);
