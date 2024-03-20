@@ -14,8 +14,8 @@ struct Particle {
     int lifespan;
     int max_lifespan;
     int size;
-    int mass;
     int type; // 0 = pull, 1 = push
+    int mass;
 
     Particle(point_2d pos, vector_2d vel, vector_2d acc, color c, int life, int size, int type);
 
@@ -28,7 +28,7 @@ void update_particles(std::vector<Particle>& particles);
 void draw_particles(std::vector<Particle>& particles);
 
 Particle::Particle(point_2d pos, vector_2d vel, vector_2d acc, color c, int life, int size = 3, int type = 0)
-        : position(pos), velocity(vel), acc(acc), clr(c), lifespan(life), max_lifespan(life), size(size), type(type), mass(pow(size, 2)) {}
+        : position(pos), velocity(vel), acc(acc), clr(c), lifespan(life), max_lifespan(life), size(size), type(type), mass(pow(size, 4)) {}
 
 void Particle::update() {
     velocity.x += acc.x;
