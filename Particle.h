@@ -69,20 +69,22 @@ void Particle::act(Particle& other) {
 
     const float G = 1.0f;
 
-    // Calculate the inverse mass ratio and the exponential decay factor
-    float inverse_mass_ratio = other.mass / mass;
-    float decay_factor = exp(-inverse_mass_ratio) * 0.5;
+    // Calculate the mass ratio and the exponential decay factor
+    float mass_ratio = mass / other.mass;
+//    std::cout << "mass ratio: " << mass_ratio << cout::endl;
+    float decay_factor = exp(-mass_ratio) * 3.;
 
     // Calculate the force with the exponential decay factor
     float force = G * (mass * other.mass) / pow(distance, 2) * decay_factor;
-    if (type == 0) {
-        force *= -1;
-    }
-    float accel = force / other.mass;
+//    if (type == 0) {
+//        force *= -1;
+//    }
+    float accel = force / mass;  // Use the current particle's mass
 
-    other.acc.x += accel * direction.x;
-    other.acc.y += accel * direction.y;
+    acc.x += accel * direction.x;  // Apply the acceleration to the current particle
+    acc.y += accel * direction.y;  // Apply the acceleration to the current particle
 }
+
 
 
 void Particle::draw() {
