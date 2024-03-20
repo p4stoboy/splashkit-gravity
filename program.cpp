@@ -16,6 +16,15 @@ enum GameState {
     GAME_OVER
 };
 
+#include <iostream>
+
+void print_particle_info(const Particle& particle1, const Particle& particle2) {
+    std::cout << "Particle 1 Position: (" << particle1.position.x << ", " << particle1.position.y << ")\n";
+    std::cout << "Particle 2 Position: (" << particle2.position.x << ", " << particle2.position.y << ")\n";
+    std::cout << "Particle 1 Acceleration: (" << particle1.acc.x << ", " << particle1.acc.y << ")\n";
+    std::cout << "Particle 2 Acceleration: (" << particle2.acc.x << ", " << particle2.acc.y << ")\n";
+}
+
 int get_fps(int& frames, time_point<steady_clock>& start_time) {
     auto current_time = steady_clock::now();
     auto elapsed_time = duration_cast<seconds>(current_time - start_time).count();
@@ -77,6 +86,9 @@ int main()
                 particles.clear();
             }
             update_particles(particles);
+            if (particles.size() == 2) {
+                print_particle_info(particles[0], particles[1]);
+            }
             draw_particles(particles);
             for (auto& p : particles) {
                 for (auto& other : particles) {
