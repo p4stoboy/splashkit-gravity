@@ -42,7 +42,7 @@ int get_fps(int& frames, time_point<steady_clock>& start_time) {
 int main()
 {
     // instantiate game state, values, input controls, and random number generator
-    open_window("Particle_Gravity", 1000, 1000);
+    window wind = open_window("Particle_Gravity", 1000, 1000);
     hide_mouse();
     GameState state = PLAYING;
     XOR rng = XOR();
@@ -74,7 +74,7 @@ int main()
                 m_down = true;
             }
             if (mouse_up(LEFT_BUTTON) && m_down) {
-                particles.push_back(Particle({player.position.x, player.position.y}, {0, 0}, {0, 0}, choose(space_colors, 7), 100, (p_size/10) | 0 + 2, 0)); //rng.randomInt(0,1)));
+                particles.push_back(Particle({player.position.x, player.position.y}, {0, 0}, {0, 0}, choose(space_colors, 7), 100, (p_size/2) | 0 + 2, 0)); //rng.randomInt(0,1)));
                 p_size = 0;
                 m_down = false;
             }
@@ -101,8 +101,8 @@ int main()
 //            }
             parallel_act(particles);
             player.draw();
+            refresh_window(wind, 120);
         }
-        refresh_screen(120);
     }
     return 0;
 }

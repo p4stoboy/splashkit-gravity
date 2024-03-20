@@ -67,11 +67,11 @@ void Particle::act(Particle& other) {
     direction.x /= distance;
     direction.y /= distance;
 
-    const float G = 0.3;
+    const float G = 1.0f;
 
     // Calculate the inverse mass ratio and the exponential decay factor
     float inverse_mass_ratio = other.mass / mass;
-    float decay_factor = exp(-inverse_mass_ratio);
+    float decay_factor = exp(-inverse_mass_ratio) * 0.5;
 
     // Calculate the force with the exponential decay factor
     float force = G * (mass * other.mass) / pow(distance, 2) * decay_factor;
@@ -86,7 +86,7 @@ void Particle::act(Particle& other) {
 
 
 void Particle::draw() {
-    fill_ellipse(clr, position.x, position.y, size, size);
+    fill_ellipse(clr, position.x - size / 2, position.y - size / 2, size, size);
 }
 
 void update_particles(std::vector<Particle>& particles) {
