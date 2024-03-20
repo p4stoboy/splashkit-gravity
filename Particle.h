@@ -5,6 +5,8 @@
 #include <algorithm> // For std::remove_if
 #include <vector>
 #include <cmath>
+#include <thread>
+#include <iostream>
 
 struct Particle {
     point_2d position;
@@ -26,6 +28,8 @@ struct Particle {
 
 void update_particles(std::vector<Particle>& particles);
 void draw_particles(std::vector<Particle>& particles);
+void parallel_act(std::vector<Particle>& particles);
+void process_particle_chunk(std::vector<Particle>& particles, int start, int end);
 
 Particle::Particle(point_2d pos, vector_2d vel, vector_2d acc, color c, int life, int size = 3, int type = 0)
         : position(pos), velocity(vel), acc(acc), clr(c), lifespan(life), max_lifespan(life), size(size), type(type), mass(pow(size, 2)) {}
@@ -94,6 +98,33 @@ void update_particles(std::vector<Particle>& particles) {
 void draw_particles(std::vector<Particle>& particles) {
     for (auto& p : particles) {
         p.draw();
+    }
+}
+
+void process_particle_chunk(std::vector<Particle>& particles, int start, int end) {
+    for (int i = start; i < end; ++i) {
+        for (int j = 0; j < particles.size(); ++j) {
+            if (i != j && particles[i].position.x != particles[j].position.x && particles[i].position.y != particles[j].position.y) {
+                particles[i].act(particles[j]);
+            }
+        }
+    }
+}
+
+void parallel_act(std::vector<Particle>& particles) {
+    const int num_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads;
+//    std::cout << "Number of threads: " << num_threads << std::endl;
+    int chunk_size = particles.size() / num_threads;
+
+    for (int i = 0; i < num_threads; ++i) {
+        int start = i * chunk_size;
+        int end = (i == num_threads - 1) ? particles.size() : start + chunk_size;
+        threads.emplace_back(process_particle_chunk, std::ref(particles), start, end);
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
     }
 }
 

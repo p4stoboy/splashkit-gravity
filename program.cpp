@@ -86,17 +86,20 @@ int main()
                 particles.clear();
             }
             update_particles(particles);
-            if (particles.size() == 2) {
-                print_particle_info(particles[0], particles[1]);
-            }
+
+            // DEBUG - remove
+//            if (particles.size() == 2) {
+//                print_particle_info(particles[0], particles[1]);
+//            }
             draw_particles(particles);
-            for (auto& p : particles) {
-                for (auto& other : particles) {
-                    if (p.position.x != other.position.x && p.position.y != other.position.y) {
-                        p.act(other);
-                    }
-                }
-            }
+//            for (auto& p : particles) {
+//                for (auto& other : particles) {
+//                    if (p.position.x != other.position.x && p.position.y != other.position.y) {
+//                        p.act(other);
+//                    }
+//                }
+//            }
+            parallel_act(particles);
             player.draw();
         }
         refresh_screen(120);
