@@ -47,7 +47,7 @@ int main()
     GameState state = PLAYING;
     XOR rng = XOR();
     vector<Particle> particles;
-    Block player = Block({screen_width() / 2, screen_height() - 20}, {0, 0}, {0, 0}, COLOR_BLACK, 5);
+    Block player = Block({screen_width() / 2, screen_height() - 20}, {0, 0}, {0, 0}, COLOR_WHITE, 5);
     int frames = 0;
     int fps = 0;
     int p_size = 0;
@@ -57,7 +57,7 @@ int main()
     // game loop
     while (!quit_requested()) {
         process_events();
-        clear_screen(color_from_hex("#474143"));
+        clear_screen(color_from_hex("#252021"));
         if (state == PLAYING) {
             frames++;
             int new_fps = get_fps(frames, start_time);
