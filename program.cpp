@@ -42,7 +42,7 @@ int get_fps(int& frames, time_point<steady_clock>& start_time) {
 int main()
 {
     // instantiate game state, values, input controls, and random number generator
-    window wind = open_window("Particle_Gravity", 1000, 1000);
+    window wind = open_window("Particle_Gravity", 2000, 1300);
     hide_mouse();
     GameState state = PLAYING;
     XOR rng = XOR();

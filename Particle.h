@@ -72,7 +72,7 @@ void Particle::act(Particle& other) {
     // Calculate the mass ratio and the exponential decay factor
     float mass_ratio = mass / other.mass;
 //    std::cout << "mass ratio: " << mass_ratio << cout::endl;
-    float decay_factor = exp(-mass_ratio) * 3.;
+    float decay_factor = 1; //exp(-mass_ratio) * 3.;
 
     // Calculate the force with the exponential decay factor
     float force = G * (mass * other.mass) / pow(distance, 2) * decay_factor;
